@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import ThemeSwitchBtn from "../ThemeSwitchBtn";
-import NotificationBtn from "../Notification/Btn";
+import Notification from "../Notification";
 
 const NavBar = () => {
 	return (
@@ -16,7 +16,7 @@ const NavBar = () => {
 
 				<div className="flex flex-1 justify-end gap-2">
 					<ThemeSwitchBtn />
-					<NotificationBtn />
+					<Notification />
 				</div>
 			</div>
 		</nav>

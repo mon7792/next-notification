@@ -1,14 +1,21 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
+import { forwardRef } from "react";
+
 import { Bell, BellDot } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 const DEFAULT_MAX_COUNT = 10;
 
-type NotificationBtnProps = {
+type NotificationButtonProps = {
 	count?: number;
 };
 
-const NotificationBtn = ({ count = 2 }: NotificationBtnProps) => {
+const NotificationButton = forwardRef<
+	HTMLButtonElement,
+	NotificationButtonProps
+>(({ count = 2, ...props }, ref) => {
 	return (
 		<div className="relative">
 			{count > 0 && (
@@ -16,13 +23,13 @@ const NotificationBtn = ({ count = 2 }: NotificationBtnProps) => {
 					{count > DEFAULT_MAX_COUNT ? `${DEFAULT_MAX_COUNT}+` : count}
 				</span>
 			)}
-			<Button variant="outline" size="icon">
+			<Button ref={ref} variant="outline" size="icon" {...props}>
 				{count > 0 ? <BellDot /> : <Bell />}
 
 				<span className="sr-only">Notifications</span>
 			</Button>
 		</div>
 	);
-};
+});
 
-export default NotificationBtn;
+export default NotificationButton;
