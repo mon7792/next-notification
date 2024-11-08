@@ -1,6 +1,5 @@
 import Image from "next/image";
-import NavBar from "./components/NavBar";
-import ThemeSwitchBtn from "./components/ThemeSwitchBtn";
+import NavBar from "@/components/NavBar";
 
 export default function Home() {
 	return (
@@ -53,7 +52,6 @@ export default function Home() {
 							Read our docs
 						</a>
 					</div>
-					<ThemeSwitchBtn />
 				</main>
 				<footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 					<a
