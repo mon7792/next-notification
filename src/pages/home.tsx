@@ -6,16 +6,11 @@ import { Plus } from "lucide-react";
 import { NotificationContext } from "@/context/notification";
 import { NotificationActionType } from "@/actions/notification";
 import notifications from "@/data/notification";
+import ActivityContextProvider from "@/context/activities";
 
 import NavBar from "@/components/NavBar";
-import ActivityInput from "@/components/Activity/Input";
-import ActivityItem from "@/components/Activity/Item/ActivityItem";
+import Activity from "@/components/Activity";
 
-// TODO: THIS SHOULD BECOME A LIST OF ACTIVITIES FROM THE API
-const demoActivities = [
-	{ id: 1, name: "Activity 1", done: false },
-	{ id: 2, name: "Activity 2", done: true },
-];
 
 const HomePage = () => {
 	const { dispatch } = useContext(NotificationContext);
@@ -23,7 +18,6 @@ const HomePage = () => {
 	// Load notifications
 	// make the call to the API or use react query
 	useEffect(() => {
-		console.log("HomePage");
 		dispatch({
 			type: NotificationActionType.LOAD_NOTIFICATIONS,
 			payload: notifications,
@@ -50,13 +44,9 @@ const HomePage = () => {
 							<div className="text-2xl font-bold text-pink-700">TRACKER</div>
 						</div>
 					</div>
-					<ActivityInput />
-
-					<div className="flex flex-col gap-2">
-						{demoActivities.map((activity) => (
-							<ActivityItem key={activity.id} activity={activity} />
-						))}
-					</div>
+					<ActivityContextProvider>
+						<Activity />
+					</ActivityContextProvider>
 				</main>
 				<footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 					<a
