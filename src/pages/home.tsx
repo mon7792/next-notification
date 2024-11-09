@@ -3,26 +3,12 @@ import { useContext, useEffect } from "react";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 
-import { NotificationContext } from "@/context/notification";
-import { NotificationActionType } from "@/actions/notification";
-import notifications from "@/data/notification";
 import ActivityContextProvider from "@/context/activities";
 
 import NavBar from "@/components/NavBar";
 import Activity from "@/components/Activity";
 
-
 const HomePage = () => {
-	const { dispatch } = useContext(NotificationContext);
-
-	// Load notifications
-	// make the call to the API or use react query
-	useEffect(() => {
-		dispatch({
-			type: NotificationActionType.LOAD_NOTIFICATIONS,
-			payload: notifications,
-		});
-	}, [dispatch]);
 
 	return (
 		<>

@@ -1,47 +1,25 @@
-import { useContext, useRef, useState } from "react";
-import { ActivityActionType } from "@/actions/activities";
-import { ActivityContext } from "@/context/activities";
+import { useRef } from "react";
+
+import { useCreateActivity } from "@/api/mutation/activity";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const createActivity = (name: string) => ({
+const createAct = (name: string) => ({
 	id: Date.now(),
 	name,
 	done: false,
 });
 
 const ActivityInput = () => {
-	const { activities, dispatch } = useContext(ActivityContext);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [isLoading, setIsLoading] = useState(false);
+	
+	const { mutate: createActivity } = useCreateActivity();
 
-	const handleAddActivity = async () => {
+	const handleAddActivity = () => {
 		if (!inputRef.current) return;
-		setIsLoading(true);
-
-		const originalActivities = activities.activities;
-		const optimisticActivity = createActivity(inputRef.current.value);
-		dispatch({
-			type: ActivityActionType.CREATE_ACTIVITY_OPTIMISTIC,
-			payload: optimisticActivity,
-		});
+		createActivity(createAct(inputRef.current.value));
 		inputRef.current.value = "";
-		setIsLoading(false);
-
-		// Simulate a delay
-		await new Promise((resolve) => setTimeout(resolve, 5000))
-			.then(() => {
-				console.log("success");
-			})
-			.catch(() => {
-				dispatch({
-					type: ActivityActionType.LOAD_ACTIVITIES,
-					payload: originalActivities,
-				});
-			});
-
-		
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,11 +35,8 @@ const ActivityInput = () => {
 				className="border-1"
 				placeholder="Add a new activity"
 				onKeyDown={handleKeyDown}
-				disabled={isLoading}
 			/>
-			<Button onClick={handleAddActivity} disabled={isLoading}>
-				{isLoading ? "Tracking..." : "Track"}
-			</Button>
+			<Button onClick={handleAddActivity}>Track</Button>
 		</div>
 	);
 };

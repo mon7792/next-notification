@@ -4,12 +4,12 @@ import type { Activity } from "@/types";
 const demoActivities: Activity[] = [
 	{
 		id: 1,
-		name: "Activity 1",
+		name: "Activity React Query 1",
 		done: true,
 	},
 	{
 		id: 2,
-		name: "Activity 2",
+		name: "Activity React Query 2",
 		done: false,
 	},
 ];

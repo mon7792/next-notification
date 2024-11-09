@@ -1,20 +1,14 @@
-import { useContext } from "react";
 import type { Activity } from "@/types";
 import { cn } from "@/lib/utils";
-
-import { ActivityActionType } from "@/actions/activities";
-import { ActivityContext } from "@/context/activities";
+import { useUpdateActivity } from "@/api/mutation/activity";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
 const ActivityItem = ({ activity }: { activity: Activity }) => {
-	const { dispatch } = useContext(ActivityContext);
+	const { mutate: updateActivity } = useUpdateActivity();
 
 	const handleMarkAsDone = () => {
-		dispatch({
-			type: ActivityActionType.MARK_AS_DONE,
-			payload: activity.id,
-		});
+		updateActivity(activity.id);
 	};
 
 	return (
