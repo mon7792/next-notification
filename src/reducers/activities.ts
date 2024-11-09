@@ -17,6 +17,11 @@ export const activityReducer = (state: ActivityState, action: ActivityAction) =>
 			return { ...state, activities: action.payload };
 		case ActivityActionType.CREATE_ACTIVITY:
 			return { ...state, activities: [...state.activities, action.payload] };
+		case ActivityActionType.CREATE_ACTIVITY_OPTIMISTIC:
+			return {
+				...state,
+				activities: [...state.activities, action.payload],
+			};
 		case ActivityActionType.MARK_AS_DONE:
 			return {
 				...state,

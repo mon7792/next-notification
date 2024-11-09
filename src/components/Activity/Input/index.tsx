@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { ActivityActionType } from "@/actions/activities";
 import { ActivityContext } from "@/context/activities";
 
@@ -12,17 +12,36 @@ const createActivity = (name: string) => ({
 });
 
 const ActivityInput = () => {
-	const { dispatch } = useContext(ActivityContext);
-	const ref = useRef<HTMLInputElement>(null);
+	const { activities, dispatch } = useContext(ActivityContext);
+	const inputRef = useRef<HTMLInputElement>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
-	const handleAddActivity = () => {
-		if (!ref.current) return;
+	const handleAddActivity = async () => {
+		if (!inputRef.current) return;
+		setIsLoading(true);
 
+		const originalActivities = activities.activities;
+		const optimisticActivity = createActivity(inputRef.current.value);
 		dispatch({
-			type: ActivityActionType.CREATE_ACTIVITY,
-			payload: createActivity(ref.current.value),
+			type: ActivityActionType.CREATE_ACTIVITY_OPTIMISTIC,
+			payload: optimisticActivity,
 		});
-		ref.current.value = "";
+		inputRef.current.value = "";
+		setIsLoading(false);
+
+		// Simulate a delay
+		await new Promise((resolve) => setTimeout(resolve, 5000))
+			.then(() => {
+				console.log("success");
+			})
+			.catch(() => {
+				dispatch({
+					type: ActivityActionType.LOAD_ACTIVITIES,
+					payload: originalActivities,
+				});
+			});
+
+		
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -34,12 +53,15 @@ const ActivityInput = () => {
 	return (
 		<div className="flex flex-row gap-4 items-center">
 			<Input
-				ref={ref}
+				ref={inputRef}
 				className="border-1"
 				placeholder="Add a new activity"
 				onKeyDown={handleKeyDown}
+				disabled={isLoading}
 			/>
-			<Button onClick={handleAddActivity}>Track</Button>
+			<Button onClick={handleAddActivity} disabled={isLoading}>
+				{isLoading ? "Tracking..." : "Track"}
+			</Button>
 		</div>
 	);
 };
