@@ -1,13 +1,21 @@
 "use client";
 import { useContext, useEffect } from "react";
 import Image from "next/image";
+import { Plus } from "lucide-react";
 
 import { NotificationContext } from "@/context/notification";
 import { NotificationActionType } from "@/actions/notification";
 import notifications from "@/data/notification";
 
 import NavBar from "@/components/NavBar";
+import ActivityInput from "@/components/Activity/Input";
+import ActivityItem from "@/components/Activity/Item/ActivityItem";
 
+// TODO: THIS SHOULD BECOME A LIST OF ACTIVITIES FROM THE API
+const demoActivities = [
+	{ id: 1, name: "Activity 1", done: false },
+	{ id: 2, name: "Activity 2", done: true },
+];
 
 const HomePage = () => {
 	const { dispatch } = useContext(NotificationContext);
@@ -22,55 +30,32 @@ const HomePage = () => {
 		});
 	}, [dispatch]);
 
-
 	return (
 		<>
 			<NavBar />
 			<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-				<main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-					<Image
-						className="dark:invert"
-						src="https://nextjs.org/icons/next.svg"
-						alt="Next.js logo"
-						width={180}
-						height={38}
-						priority
-					/>
-					<ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-						<li className="mb-2">
-							Get started by editing{" "}
-							<code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-								src/app/page.tsx
-							</code>
-							.
-						</li>
-						<li>Save and see your changes instantly.</li>
-					</ol>
+				<main className="flex flex-col gap-8 row-start-2 items-center">
+					<div className="flex flex-row gap-4 items-center">
+						<Image
+							className="dark:invert"
+							src="https://nextjs.org/icons/next.svg"
+							alt="Next.js logo"
+							width={180}
+							height={38}
+							priority
+						/>
+						<Plus />
+						<div className="flex flex-col">
+							<div className="text-2xl font-bold">ACTIVITY</div>
+							<div className="text-2xl font-bold text-pink-700">TRACKER</div>
+						</div>
+					</div>
+					<ActivityInput />
 
-					<div className="flex gap-4 items-center flex-col sm:flex-row">
-						<a
-							className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-							href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<Image
-								className="dark:invert"
-								src="https://nextjs.org/icons/vercel.svg"
-								alt="Vercel logomark"
-								width={20}
-								height={20}
-							/>
-							Deploy now
-						</a>
-						<a
-							className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-							href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Read our docs
-						</a>
+					<div className="flex flex-col gap-2">
+						{demoActivities.map((activity) => (
+							<ActivityItem key={activity.id} activity={activity} />
+						))}
 					</div>
 				</main>
 				<footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">

@@ -7,4 +7,10 @@ export type Notification = {
 		url: string;
 		fallback: string;
 	};
-}
+};
+
+export type Activity = {
+	id: number;
+	name: string;
+	done: boolean;
+};
