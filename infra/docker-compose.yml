@@ -1,0 +1,44 @@
+version: "3"
+services:
+  database:
+    image: postgres:16
+    container_name: notification-db-local
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "directus"
+      POSTGRES_PASSWORD: "directus"
+      POSTGRES_DB: "directus"
+    volumes:
+      - notification-db-local-vol:/var/lib/postgresql/data
+  cache:
+    image: redis:6
+    container_name: notification-cache-local
+    ports:
+      - 6379:6379
+  directus:
+    image: directus/directus:11.1.0
+    container_name: notification-cms-local
+    ports:
+      - 8055:8055
+    environment:
+      SECRET: "NTydy2QHarFE3KQX4WwD"
+      ADMIN_EMAIL: "admin@hedgehodigi.com"
+      ADMIN_PASSWORD: "Gc60b5xNWP9mljHkGnee"
+      DB_CLIENT: "pg"
+      DB_HOST: "database"
+      DB_PORT: "5432"
+      DB_USER: "directus"
+      DB_PASSWORD: "directus"
+      DB_DATABASE: "directus"
+      CACHE_HOST: "cache"
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      REDIS: "redis://cache:6379"
+      WEBSOCKETS_ENABLED: "true"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:5173"
+      CORS_METHODS: "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      CORS_HEADERS: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+volumes:
+    notification-db-local-vol:
