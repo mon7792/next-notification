@@ -10,7 +10,7 @@ export type Notification = {
 };
 
 export type Activity = {
-	id: number;
+	id: string;
 	name: string;
 	done: boolean;
 };

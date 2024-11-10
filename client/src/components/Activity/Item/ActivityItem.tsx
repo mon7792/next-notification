@@ -8,7 +8,7 @@ const ActivityItem = ({ activity }: { activity: Activity }) => {
 	const { mutate: updateActivity } = useUpdateActivity();
 
 	const handleMarkAsDone = () => {
-		updateActivity(activity.id);
+		updateActivity({ id: activity.id, activity: { ...activity, done: !activity.done } });
 	};
 
 	return (

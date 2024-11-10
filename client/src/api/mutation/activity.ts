@@ -36,8 +36,9 @@ export const useUpdateActivity = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: updateActivity,
-		onMutate: async (id: number) => {
+		mutationFn: ({ id, activity }: { id: string; activity: Activity }) => 
+			updateActivity(id, activity),
+		onMutate: async ({ id }: { id: string }) => {
 			await queryClient.cancelQueries({ queryKey: ["activities"] });
 
 			const previousActivities = queryClient.getQueryData<Activity[]>([
