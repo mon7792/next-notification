@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
+import { EventEmitter } from "node:events";
 
 import {
 	createActivity,
@@ -9,6 +10,7 @@ import {
 	updateActivity,
 } from "./activity";
 
+const eventEmitter = new EventEmitter();
 const app = new Hono();
 
 app.use("*", cors());
@@ -50,16 +52,31 @@ let id = 0;
 
 app.get("/sse", async (c) => {
 	return streamSSE(c, async (stream) => {
-		while (true) {
-			const message = `${new Date().toISOString()}`;
+		const listener = async (message: string) => {
 			await stream.writeSSE({
 				data: message,
 				event: "time-update",
 				id: String(id++),
 			});
-			await stream.sleep(1000);
+		};
+
+		eventEmitter.on("new-message", listener);
+
+		// Clean up listener when connection closes
+		c.req.raw.signal.addEventListener("abort", () => {
+			eventEmitter.off("new-message", listener);
+		});
+
+		// Keep connection alive
+		while (true) {
+			await stream.sleep(30000); // 30-second heartbeat
 		}
 	});
+});
+
+app.get("/trigger-message", async (c) => {
+	eventEmitter.emit("new-message", new Date().toISOString());
+	return c.json({ success: true });
 });
 
 export default {
